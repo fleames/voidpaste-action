@@ -1,0 +1,82 @@
+name: VoidPaste Create
+description: Create an ephemeral paste on https://voidpaste.com via POST /api/v1/pastes
+author: fleames
+branding:
+  icon: clipboard
+  color: gray-dark
+
+inputs:
+  api-key:
+    description: VoidPaste API key (vp_live_… or vp_test_…). Store as a repository secret.
+    required: true
+  content:
+    description: Paste body as a string. Use path instead for files or large logs.
+    required: false
+    default: ""
+  path:
+    description: Path to a file whose contents become the paste body (max 1 MB).
+    required: false
+    default: ""
+  title:
+    description: Optional paste title.
+    required: false
+    default: ""
+  language:
+    description: Optional syntax language (e.g. go, python, log).
+    required: false
+    default: ""
+  visibility:
+    description: public | unlisted | private | password (default unlisted).
+    required: false
+    default: unlisted
+  expiration:
+    description: Expiration preset or duration (e.g. 1h, 1d, 1w, 1M, never).
+    required: false
+    default: 1d
+  burn:
+    description: If true, burn after first authorized read (prefer expiry for chat/CI links).
+    required: false
+    default: "false"
+  password:
+    description: Paste password (required when visibility=password). Prefer secrets.
+    required: false
+    default: ""
+  idempotency-key:
+    description: Optional Idempotency-Key header (max 256 chars). Use for CI retries.
+    required: false
+    default: ""
+  api-base:
+    description: API origin (default https://voidpaste.com).
+    required: false
+    default: https://voidpaste.com
+
+outputs:
+  id:
+    description: Public paste id
+    value: ${{ steps.create.outputs.id }}
+  url:
+    description: Share URL (https://voidpaste.com/p/{id}) — prefer this in chat
+    value: ${{ steps.create.outputs.url }}
+  raw_url:
+    description: Raw content URL (unsafe for burn pastes in Slack/Discord)
+    value: ${{ steps.create.outputs.raw_url }}
+
+runs:
+  using: composite
+  steps:
+    - id: create
+      name: Create paste
+      shell: bash
+      env:
+        VP_API_KEY: ${{ inputs.api-key }}
+        VP_API_BASE: ${{ inputs.api-base }}
+        VP_CONTENT: ${{ inputs.content }}
+        VP_PATH: ${{ inputs.path }}
+        VP_TITLE: ${{ inputs.title }}
+        VP_LANGUAGE: ${{ inputs.language }}
+        VP_VISIBILITY: ${{ inputs.visibility }}
+        VP_EXPIRATION: ${{ inputs.expiration }}
+        VP_BURN: ${{ inputs.burn }}
+        VP_PASSWORD: ${{ inputs.password }}
+        VP_IDEMPOTENCY_KEY: ${{ inputs.idempotency-key }}
+      run: bash "${{ github.action_path }}/create.sh"
