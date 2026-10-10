@@ -14,7 +14,7 @@ inputs:
     required: false
     default: ""
   path:
-    description: Path to a file whose contents become the paste body (max 1 MB).
+    description: Path to a file whose contents become the paste body (max 5 MB).
     required: false
     default: ""
   title:

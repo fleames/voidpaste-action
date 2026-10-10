@@ -30,8 +30,8 @@ if [[ -n "${VP_PATH:-}" ]]; then
     exit 1
   fi
   SIZE="$(wc -c <"$VP_PATH" | tr -d ' ')"
-  if [[ "$SIZE" -gt 1048576 ]]; then
-    echo "::error::File exceeds 1 MB paste limit ($SIZE bytes)"
+  if [[ "$SIZE" -gt 5242880 ]]; then
+    echo "::error::File exceeds 5 MB paste limit ($SIZE bytes)"
     exit 1
   fi
   if [[ "$SIZE" -eq 0 ]]; then

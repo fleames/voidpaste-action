@@ -43,7 +43,7 @@ Store a key from [Dashboard → API Keys](https://voidpaste.com/dashboard/api-ke
 |-------|----------|---------|-------|
 | `api-key` | yes | — | `vp_live_…` secret |
 | `content` | one of content/path | — | Inline body |
-| `path` | one of content/path | — | File to upload (≤ 1 MB) |
+| `path` | one of content/path | — | File to upload (≤ 5 MB) |
 | `title` | no | | |
 | `language` | no | | e.g. `go`, `log` |
 | `visibility` | no | `unlisted` | `public` \| `unlisted` \| `private` \| `password` |
