@@ -9,6 +9,10 @@ if [[ -z "${VP_API_KEY:-}" ]]; then
   echo "::error::api-key is required (store as a GitHub Actions secret)"
   exit 1
 fi
+echo "::add-mask::${VP_API_KEY}"
+if [[ -n "${VP_PASSWORD:-}" ]]; then
+  echo "::add-mask::${VP_PASSWORD}"
+fi
 
 if [[ -n "${VP_PATH:-}" && -n "${VP_CONTENT:-}" ]]; then
   echo "::error::Provide either path or content, not both"
@@ -76,7 +80,8 @@ CURL_ARGS=(
   -H "Authorization: Bearer ${VP_API_KEY}"
   -H "Content-Type: application/json"
   -H "Accept: application/json"
-  -H "User-Agent: voidpaste-action/1.0"
+  -H "X-VoidPaste-Client: action"
+  -H "User-Agent: voidpaste-action/1.0.1"
   --data-binary @"$BODY_FILE"
   -o "$RESP_FILE"
   -w "%{http_code}"

@@ -16,7 +16,8 @@ jobs:
   paste:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # actions/checkout v4, pinned to an immutable commit.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Upload log
         id: vp
@@ -61,6 +62,10 @@ Store a key from [Dashboard → API Keys](https://voidpaste.com/dashboard/api-ke
 | `raw_url` | `https://voidpaste.com/raw/{id}` — **unsafe for burn pastes in Slack/Discord** (crawlers may fetch and burn) |
 
 The step writes the paste link to `$GITHUB_STEP_SUMMARY`.
+
+The action sends only the bounded `X-VoidPaste-Client: action` channel marker.
+It does not send device or installation IDs, usernames, repository names,
+workflow IDs, tracking cookies, or any other attribution identifier.
 
 ## Chat safety
 
